@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Photo Gallery</string>
+    <string name="label_no_result">No result has been found!</string>
+    <string name="label_photo_detail">Photo Detail</string>
+    <string name="label_retry">Retry</string>
+    <string name="label_search">Search</string>
+    <string name="label_unable_to_load_data">Unable to load data!</string>
+</resources>
