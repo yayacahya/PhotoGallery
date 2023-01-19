@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.yayanurc.photogallery.R
 import com.yayanurc.photogallery.models.Photo
 import com.yayanurc.photogallery.databinding.ListViewItemBinding
+import com.yayanurc.photogallery.di.GlideApp
 
 
 class PhotoAdapter(val onPhotoSelected: (photo: Photo, position: Int) -> Unit) :
@@ -33,12 +33,13 @@ class PhotoAdapter(val onPhotoSelected: (photo: Photo, position: Int) -> Unit) :
         fun bind(photo: Photo) {
             binding.apply {
                 // Glide - to load images
-                Glide.with(itemView)
+                GlideApp.with(itemView)
                     .load(photo.urls.regular)
                     .error(R.drawable.ic_error)
-                    .fitCenter()
+                    .override(500, 500)
+                    .centerInside()
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .into(imageViewPhoto)
 
                 textViewUsername.text = photo.user.name
