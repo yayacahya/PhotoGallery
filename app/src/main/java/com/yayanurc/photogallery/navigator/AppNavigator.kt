@@ -1,7 +1,5 @@
 package com.yayanurc.photogallery.navigator
 
-import android.os.Bundle
-
 /**
  * Available screens.
  */
@@ -15,5 +13,5 @@ enum class Screens {
  */
 interface AppNavigator {
     // Navigate to a given screen.
-    fun navigateTo(screen: Screens, title: String, bundle: Bundle? = null)
+    fun navigateTo(screen: Screens, anything: Any? = null)
 }

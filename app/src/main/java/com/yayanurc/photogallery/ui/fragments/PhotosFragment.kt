@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
-import androidx.core.os.bundleOf
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -40,7 +39,7 @@ import javax.inject.Inject
  * - List and Grid Display Style
  */
 @AndroidEntryPoint
-class PhotosFragment(private val titleName: String): Fragment(R.layout.fragment_photos) {
+class PhotosFragment: Fragment(R.layout.fragment_photos) {
 
     @Inject lateinit var navigator: AppNavigator
     @Inject lateinit var sharedPrefDataSource: SharedPrefDataSource
@@ -61,7 +60,7 @@ class PhotosFragment(private val titleName: String): Fragment(R.layout.fragment_
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (requireActivity() as MainActivity).supportActionBar?.apply {
-            title = titleName
+            title = getString(R.string.app_name)
             setDisplayHomeAsUpEnabled(false)
             setDisplayShowHomeEnabled(false)
         }
@@ -73,8 +72,7 @@ class PhotosFragment(private val titleName: String): Fragment(R.layout.fragment_
         }
 
         val adapter = PhotoAdapter { photo, _ ->
-            val bundle = bundleOf("photo" to photo)
-            navigator.navigateTo(Screens.PHOTO_DETAIL, getString(R.string.label_photo_detail), bundle)
+            navigator.navigateTo(Screens.PHOTO_DETAIL, photo)
         }
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -119,7 +117,6 @@ class PhotosFragment(private val titleName: String): Fragment(R.layout.fragment_
                             if (query != null) {
                                 binding.rvPhotos.scrollToPosition(0)
                                 viewModel.searchPhotos(query)
-                                mSearchString = query
                                 searchView.clearFocus()
                             }
                             return true

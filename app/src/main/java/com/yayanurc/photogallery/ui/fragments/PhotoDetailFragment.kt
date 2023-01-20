@@ -2,6 +2,7 @@ package com.yayanurc.photogallery.ui.fragments
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,7 +17,7 @@ import com.yayanurc.photogallery.models.Photo
 import com.yayanurc.photogallery.databinding.FragmentPhotoDetailBinding
 import com.yayanurc.photogallery.di.GlideApp
 import com.yayanurc.photogallery.ui.MainActivity
-import com.yayanurc.photogallery.utils.parcelable
+import com.yayanurc.photogallery.utils.argument
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -25,16 +26,20 @@ import dagger.hilt.android.AndroidEntryPoint
  * feature : ZoomIn-ZoomOut by Pinching Finger and Double Tap
  */
 @AndroidEntryPoint
-class PhotoDetailFragment(private val titleName: String) : Fragment(R.layout.fragment_photo_detail) {
+class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail) {
 
     private var _binding: FragmentPhotoDetailBinding? = null
     private val binding get() = _binding!!
 
+    private val photo by argument<Parcelable>(PHOTO_TEXT)
+
+    companion object {
+        const val PHOTO_TEXT = "photo"
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         (requireActivity() as MainActivity).supportActionBar?.apply {
-            title = titleName
+            title = getString(R.string.label_photo_detail)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
@@ -42,10 +47,9 @@ class PhotoDetailFragment(private val titleName: String) : Fragment(R.layout.fra
         _binding = FragmentPhotoDetailBinding.bind(view)
 
         binding.apply {
-            val photo = arguments?.parcelable<Photo>("photo")
 
             GlideApp.with(this@PhotoDetailFragment)
-                .load(photo?.urls?.regular)
+                .load((photo as Photo).urls.regular)
                 .error(R.drawable.ic_error)
                 .centerInside()
                 .transition(DrawableTransitionOptions.withCrossFade())
